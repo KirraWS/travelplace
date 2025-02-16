@@ -1,31 +1,36 @@
-require('dotenv').config();
+require('dotenv').config();  // Load environment variables from .env file
 const express = require('express');
 const { Pool } = require('pg');
 const path = require('path');
 const fs = require('fs');
 
+// Initialize express and server
 const app = express();
-const PORT = 5000;
 
-// Database connection
+// Use environment variables from .env file
+const PORT = process.env.PORT || 5000;  // Default to 5000 if PORT is not defined
+
+// Use DATABASE_URL for PostgreSQL connection
 const pool = new Pool({
-    connectionString: 'postgresql://wahajfs:wahajfs@localhost:5432/traveldb'
+    connectionString: process.env.DATABASE_URL
 });
 
-// Middleware
+// Middleware to serve static files from the current directory
+app.use(express.static(__dirname));  // This will serve all files in the current directory, including script.js
+
 app.use(express.json());
 
-// Get absolute path of index.html
+// Define path for the index file
 const indexPath = path.join(__dirname, 'index.html');
 
-// Check if index.html exist
+// Check if index.html exists
 if (!fs.existsSync(indexPath)) {
     console.error(`❌ ERROR: index.html not found at ${indexPath}`);
 } else {
     console.log(`✅ index.html found at ${indexPath}`);
 }
 
-// Serve index.html from the root folder
+// Route to serve the index.html file
 app.get('/', (req, res) => {
     if (fs.existsSync(indexPath)) {
         res.sendFile(indexPath);
@@ -34,7 +39,7 @@ app.get('/', (req, res) => {
     }
 });
 
-// Fetch stays
+// Route to get all stays
 app.get('/stays', async (req, res) => {
     try {
         const result = await pool.query('SELECT * FROM stays');
@@ -45,21 +50,24 @@ app.get('/stays', async (req, res) => {
     }
 });
 
-// Add a stay
+// Route to add a new stay
 app.post('/stays', async (req, res) => {
-    const { name, location, description, image, rating } = req.body;
+    const { name, location, description, date } = req.body;
 
-    console.log("Received Data:", req.body); // Debugging line
+    console.log("Received Data:", req.body);
 
-    if (!name || !location || !description || !image || !rating) {
+    // If date is missing, set it to the current date
+    const formattedDate = date || new Date().toISOString();
+
+    if (!name || !location || !description || !formattedDate) {
         console.log("❌ Missing fields");
         return res.status(400).json({ error: 'All fields are required' });
     }
 
     try {
         const result = await pool.query(
-            'INSERT INTO stays (name, location, description, image, rating) VALUES ($1, $2, $3, $4, $5) RETURNING *',
-            [name, location, description, image, rating]
+            'INSERT INTO stays (name, location, description, date) VALUES ($1, $2, $3, $4) RETURNING *',
+            [name, location, description, formattedDate]
         );
         console.log("✅ Inserted Successfully:", result.rows[0]);
         res.json(result.rows[0]);
@@ -68,7 +76,6 @@ app.post('/stays', async (req, res) => {
         res.status(500).json({ error: 'Database error' });
     }
 });
-
 
 // Start the server
 app.listen(PORT, () => {
