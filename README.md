@@ -71,14 +71,12 @@ TravelPlace/
 Returns a list of all stays from the database.
 ```json
 [
-  {
-    "id": 1,
-    "name": "Cozy Cabin",
-    "location": "Colorado, USA",
-    "description": "A peaceful mountain retreat.",
-    "image": "https://example.com/cabin.jpg",
-    "rating": 5
-  }
+  id: 2,
+  name: 'ELAINE PHAM',
+  location: 'Florida',
+  description: 'asdad',
+  date: 2025-02-21T06:00:00.000Z
+}
 ]
 ```
 
