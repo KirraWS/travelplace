@@ -19,7 +19,7 @@
 - **Frontend**: HTML, CSS, JavaScript  
 - **Backend**: Node.js, Express.js  
 - **Database**: PostgreSQL  
-- **Hosting**: Render (for backend and database)  
+- **Hosting**: Locally  
 
 ---
 
