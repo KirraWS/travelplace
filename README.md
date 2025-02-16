@@ -6,8 +6,8 @@
 
 ## ✨ Features
 
-✔️ View a list of stays with images, descriptions, and ratings  
-✔️ Add a new stay with details such as name, location, description, image, and rating  
+✔️ View a list of stays with name, location, descriptions, and date  
+✔️ Add a new stay with details such as name, location, descriptions, and date   
 ✔️ Backend API with PostgreSQL for storing stays  
 ✔️ Frontend built using HTML, CSS, and JavaScript  
 ✔️ Backend powered by Express.js and PostgreSQL  
@@ -121,12 +121,11 @@ SELECT * FROM stays;
 ✔️ If missing, create it:
 ```sql
 CREATE TABLE stays (
-  id SERIAL PRIMARY KEY,
-  name TEXT NOT NULL,
-  location TEXT NOT NULL,
-  description TEXT NOT NULL,
-  image TEXT NOT NULL,
-  rating INTEGER CHECK (rating >= 1 AND rating <= 5) NOT NULL
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    location VARCHAR(255) NOT NULL,
+    description TEXT NOT NULL,
+    date TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 ```
 
