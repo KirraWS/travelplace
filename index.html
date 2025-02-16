@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>StayScout</title>
+    <style>
+        #message {
+            margin-top: 10px;
+            font-size: 16px;
+            font-weight: bold;
+        }
+        .success {
+            color: green;
+        }
+        .error {
+            color: red;
+        }
+    </style>
+</head>
+<body>
+    <h1>Welcome to StayScout</h1>
+    <p>Explore unique places to stay!</p>
+    
+    <h2>Add a Stay</h2>
+    <form id="stayForm">
+        <input type="text" id="name" placeholder="Stay Name" required>
+        <input type="text" id="location" placeholder="Location" required>
+        <input type="text" id="description" placeholder="Description" required>
+        <input type="text" id="image" placeholder="Image URL" required>
+        <input type="number" id="rating" placeholder="Rating (1-5)" min="1" max="5" required>
+        <button type="submit">Add Stay</button>
+    </form>
+    
+    <p id="message"></p> <!-- Success/Error message will appear here -->
+
+    <h2> Please check Booked List before book</h2>
+    <ul id="staysList"></ul>
+
+    <script>
+        document.getElementById("stayForm").addEventListener("submit", async function(event) {
+            event.preventDefault(); // Prevent default form submission
+
+            const messageElement = document.getElementById("message");
+            messageElement.textContent = ""; // Clear previous messages
+
+            const formData = {
+                name: document.getElementById("name").value,
+                location: document.getElementById("location").value,
+                description: document.getElementById("description").value,
+                image: document.getElementById("image").value,
+                rating: document.getElementById("rating").value
+            };
+
+            try {
+                const response = await fetch("/stays", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(formData)
+                });
+
+                if (response.ok) {
+                    messageElement.textContent = "Stay added successfully!";
+                    messageElement.className = "success"; // Apply green color
+                    loadStays(); // Reload stays list
+                } else {
+                    messageElement.textContent = "Error adding stay!";
+                    messageElement.className = "error"; // Apply red color
+                }
+            } catch (error) {
+                console.error("Error:", error);
+                messageElement.textContent = "Network error, please try again!";
+                messageElement.className = "error"; // Apply red color
+            }
+        });
+
+        async function loadStays() {
+            try {
+                const response = await fetch("/stays");
+                const stays = await response.json();
+                
+                const staysList = document.getElementById("staysList");
+                staysList.innerHTML = "";
+                
+                stays.forEach(stay => {
+    const li = document.createElement("li");
+    li.textContent = `${stay.name} - ${stay.location} (Rating: ${stay.rating})`;
+    staysList.appendChild(li);
+});
+
+            } catch (error) {
+                console.error("Error loading stays:", error);
+            }
+        }
+
+        loadStays(); // Load stays on page load
+    </script>
+</body>
+</html>
