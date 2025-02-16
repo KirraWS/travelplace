@@ -18,7 +18,7 @@ app.use(express.json());
 // Get absolute path of index.html
 const indexPath = path.join(__dirname, 'index.html');
 
-// Check if index.html exists
+// Check if index.html exist
 if (!fs.existsSync(indexPath)) {
     console.error(`❌ ERROR: index.html not found at ${indexPath}`);
 } else {
