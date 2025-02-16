@@ -88,23 +88,21 @@ Adds a new stay to the database.
 **Request Body (JSON)**
 ```json
 {
-  "name": "Beach House",
-  "location": "Malibu, CA",
-  "description": "A luxurious stay by the ocean.",
-  "image": "https://example.com/beachhouse.jpg",
-  "rating": 5
+  name: 'ELAINE PHAM',
+  location: 'Florida',
+  description: 'asdad',
+  date: '2025-02-21'
 }
 ```
 
 **Response**
 ```json
-{
-  "id": 2,
-  "name": "Beach House",
-  "location": "Malibu, CA",
-  "description": "A luxurious stay by the ocean.",
-  "image": "https://example.com/beachhouse.jpg",
-  "rating": 5
+✅ Inserted Successfully: {
+  id: 2,
+  name: 'ELAINE PHAM',
+  location: 'Florida',
+  description: 'asdad',
+  date: 2025-02-21T06:00:00.000Z
 }
 ```
 
